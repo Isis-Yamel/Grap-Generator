@@ -1,10 +1,15 @@
-interface NewNode {
+interface WeightedGraph {
+  addVertex(key: string): void;
+  addEdge(vertex1: string, vertex2: string, weight: number): void;
+}
+
+interface NewVertex {
   [key: string]: any;
 }
 
 class Graph { 
     numberOfNodes: number
-    adjacentList: NewNode
+    adjacentList: NewVertex
 
   constructor() { 
     this.numberOfNodes = 0;
@@ -14,27 +19,43 @@ class Graph {
     this.adjacentList[node] = []; 
     this.numberOfNodes++;
   } 
-  addEdge(node1: string, node2: string) { 
-    //undirected Graph 
-    this.adjacentList[node1].push(node2); 
-    this.adjacentList[node2].push(node1); 
+  addEdge(vertex1: string, vertex2: string, weight: number) { 
+    this.adjacentList[vertex1].push({vertex: vertex2, weight}); 
+    this.adjacentList[vertex2].push({vertex: vertex1, weight}); 
   } 
 } 
-  
-  const myGraph = new Graph();
-  myGraph.addVertex('0');
-  myGraph.addVertex('1');
-  myGraph.addVertex('2');
-  myGraph.addVertex('3');
-  myGraph.addVertex('4');
-  myGraph.addVertex('5');
-  myGraph.addVertex('6');
-  myGraph.addEdge('3', '1'); 
-  myGraph.addEdge('3', '4'); 
-  myGraph.addEdge('4', '2'); 
-  myGraph.addEdge('4', '5'); 
-  myGraph.addEdge('1', '2'); 
-  myGraph.addEdge('1', '0'); 
-  myGraph.addEdge('0', '2'); 
-  myGraph.addEdge('6', '5');
-  
+
+const myGraph: WeightedGraph = new Graph();
+
+const vertices = ['1', '2', '3', '4', '5']
+vertices.forEach(vertice => myGraph.addVertex(vertice))
+
+myGraph.addEdge('1', '4', 3); 
+myGraph.addEdge('1', '2', 5); 
+myGraph.addEdge('1', '3', 4); 
+myGraph.addEdge('2', '4', 6); 
+myGraph.addEdge('2', '3', 5); 
+
+console.log(myGraph)
+
+interface Path {
+  path: string[];
+  distance: number;
+}
+
+interface Dijkstra {
+  findShortestPath(vertex1: NewVertex, vertex2: NewVertex): Path;
+  findAllShortestPaths(vertex: string): Record<string, Path>;
+}
+
+class MyDijkstra { 
+  findShortestPath(vertex1: NewVertex, vertex2: NewVertex)  { 
+    return {
+      path: ['1', '2'],
+      distance: 2
+    }
+  } 
+  findAllShortestPaths(vertex: string) { 
+    return ['PATH']
+  } 
+} 
